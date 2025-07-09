@@ -3,8 +3,8 @@ global using BepInEx.Logging;
 
 global using HarmonyLib;
 
-global using Pulse;
-global using Pulse.Internal;
+global using PulseLib;
+global using PulseLib.Internal;
 
 global using System;
 global using System.Collections.Generic;

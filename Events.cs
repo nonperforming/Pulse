@@ -1,4 +1,4 @@
-namespace Pulse;
+namespace PulseLib;
 
 public class Events
 {

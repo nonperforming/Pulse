@@ -1,4 +1,4 @@
-namespace Pulse.Internal;
+namespace PulseLib.Internal;
 
 [HarmonyPatch]
 internal static class EventsLink
