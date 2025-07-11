@@ -7,7 +7,11 @@ internal static class EventsLink
   /// Link <see cref="Events.LevelDeselected"/>
   /// </summary>
   /// <param name="instructions">IL instructions</param>
-  /// <returns>Modified instructions that calls <see cref="Events.RaiseLevelDeselected"/> before any action is taken.</returns>
+  /// <returns>
+  /// Modified instructions that calls <see cref="Events.RaiseLevelDeselected"/> before any action is taken.
+  /// </returns>
+  /// <seealso cref="Events.LevelDeselected"/>
+  /// <seealso cref="Events.RaiseLevelDeselected"/>
   [HarmonyPatch(typeof(scnLevelSelect), nameof(scnLevelSelect.Update))]
   [HarmonyTranspiler]
   private static IEnumerable<CodeInstruction> LinkRaiseLevelDeselectedEventPatch(
@@ -15,16 +19,22 @@ internal static class EventsLink
   {
     return new CodeMatcher(instructions)
       .MatchForward(true,
-        // Checking for RDInput.cancelPress
+        // RDInput.cancelPress
         new CodeMatch(OpCodes.Ldsfld, AccessTools.Field(typeof(RDInput), nameof(RDInput.cancelPress))),
-        new CodeMatch(OpCodes.Brfalse), // jump out early if false
-        // && heartMonitor.visible && !heartMonitor.goingToLevel
+        new CodeMatch(OpCodes.Brfalse), // jump out early if false (should be true)
+        // && heartMonitor.visible
         new CodeMatch(OpCodes.Ldarg_0),
         new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(scnLevelSelect), nameof(scnLevelSelect.heartMonitor))),
         new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(HeartMonitor), nameof(HeartMonitor.visible))),
-        new CodeMatch(OpCodes.Brfalse_S)
+        new CodeMatch(OpCodes.Brfalse), // jump out early if false (should be true)
+        // && !heartMonitor.goingToLevel
+        new CodeMatch(OpCodes.Ldarg_0),
+        new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(scnLevelSelect), nameof(scnLevelSelect.heartMonitor))),
+        new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(HeartMonitor), nameof(HeartMonitor.goingToLevel))),
+        new CodeMatch(OpCodes.Brtrue) // jump out early if true (should be false)
       )
-      .Insert(CodeInstruction.Call(typeof(Events), nameof(Events.RaiseLevelDeselected)))
+      .ThrowIfInvalid("Could not find RDInput.cancelPress && heartMonitor.visible && !heartMonitor.goingToLevel in scnLevelSelect.Update")
+      .InsertAndAdvance(CodeInstruction.Call(typeof(Events), nameof(Events.RaiseLevelDeselected)))
       .InstructionEnumeration();
   }
 }
