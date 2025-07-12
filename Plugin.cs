@@ -1,3 +1,5 @@
+using PulseLib.Patches;
+
 namespace PulseLib;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
@@ -15,6 +17,9 @@ public class Plugin : BaseUnityPlugin
 
     Logger.LogInfo("Creating links to events");
     _harmony.PatchAll(typeof(EventsLink));
+
+    Logger.LogInfo("Applying patches");
+    _harmony.PatchAll(typeof(MainMenuPatch));
 
     Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} loaded!");
   }
