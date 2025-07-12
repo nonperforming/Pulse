@@ -15,10 +15,12 @@ internal static class EventsLink
   [HarmonyPatch(typeof(scnLevelSelect), nameof(scnLevelSelect.Update))]
   [HarmonyTranspiler]
   private static IEnumerable<CodeInstruction> LinkRaiseLevelDeselectedEventPatch(
-    IEnumerable<CodeInstruction> instructions)
+    IEnumerable<CodeInstruction> instructions
+  )
   {
     return new CodeMatcher(instructions)
-      .MatchForward(true,
+      .MatchForward(
+        true,
         // RDInput.cancelPress
         new CodeMatch(OpCodes.Ldsfld, AccessTools.Field(typeof(RDInput), nameof(RDInput.cancelPress))),
         new CodeMatch(OpCodes.Brfalse), // jump out early if false (should be true)
@@ -33,7 +35,9 @@ internal static class EventsLink
         new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(HeartMonitor), nameof(HeartMonitor.goingToLevel))),
         new CodeMatch(OpCodes.Brtrue) // jump out early if true (should be false)
       )
-      .ThrowIfInvalid("Could not find RDInput.cancelPress && heartMonitor.visible && !heartMonitor.goingToLevel in scnLevelSelect.Update")
+      .ThrowIfInvalid(
+        "Could not find RDInput.cancelPress && heartMonitor.visible && !heartMonitor.goingToLevel in scnLevelSelect.Update"
+      )
       .InsertAndAdvance(CodeInstruction.Call(typeof(Events), nameof(Events.RaiseLevelDeselected)))
       .InstructionEnumeration();
   }
