@@ -57,12 +57,6 @@
       <Reference Include="Assembly-CSharp" Publicize="true">
         <HintPath>$(GameDir)\Assembly-CSharp.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine.UI">
-        <HintPath>$(GameDir)\UnityEngine.UI.dll</HintPath>
-      </Reference>
-      <Reference Include="RDTools">
-        <HintPath>$(GameDir)\RDTools.dll</HintPath>
-      </Reference>
     </ItemGroup>
   </Target>
 </Project>
