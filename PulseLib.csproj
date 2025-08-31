@@ -67,6 +67,9 @@
       <Reference Include="UnityEngine.UI">
         <HintPath>$(GameDir)\UnityEngine.UI.dll</HintPath>
       </Reference>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>$(GameDir)\Newtonsoft.Json.dll</HintPath>
+      </Reference>
     </ItemGroup>
   </Target>
 </Project>

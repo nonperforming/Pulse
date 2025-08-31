@@ -19,6 +19,7 @@ public class Plugin : BaseUnityPlugin
     _harmony.PatchAll(typeof(EventsLink));
 
     Logger.LogInfo("Applying patches");
+    _harmony.PatchAll(typeof(CustomLocalizationPatch));
     _harmony.PatchAll(typeof(MainMenuPatch));
 
     Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} loaded!");
