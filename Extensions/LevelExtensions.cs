@@ -10,7 +10,8 @@ public static class LevelExtensions
   /// All levels that have a rank (not boss levels).
   /// Includes bonus levels such as Beans Hopper and Rhythm Weightlifter.
   /// </summary>
-  public static readonly Level[] AllStandardLevels = [
+  public static readonly Level[] AllStandardLevels =
+  [
     // Act 1
     Level.OrientalTechno,
     Level.OrientalDubstep,
@@ -65,7 +66,8 @@ public static class LevelExtensions
   /// <summary>
   /// All boss levels.
   /// </summary>
-  public static readonly Level[] AllBossLevels = [
+  public static readonly Level[] AllBossLevels =
+  [
     Level.OrientalInsomniac,
     Level.Boss2,
     Level.Lesmis,
@@ -76,15 +78,13 @@ public static class LevelExtensions
   /// <summary>
   /// All bonus levels.
   /// </summary>
-  public static readonly Level[] AllBonusLevels = [
-    Level.BeansHopper,
-    Level.RhythmWeightlifter,
-  ];
+  public static readonly Level[] AllBonusLevels = [Level.BeansHopper, Level.RhythmWeightlifter];
 
   /// <summary>
   /// All intermission levels.
   /// </summary>
-  public static readonly Level[] AllIntermissionLevels = [
+  public static readonly Level[] AllIntermissionLevels =
+  [
     Level.SongOfTheSea,
     Level.SongOfTheSeaH,
     Level.AthleteTherapy,
