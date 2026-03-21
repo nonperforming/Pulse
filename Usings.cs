@@ -7,6 +7,7 @@ global using HarmonyLib;
 global using PulseLib;
 global using PulseLib.Internal;
 global using PulseLib.Localization;
+global using PulseLib.Localization.Patches;
 global using PulseLib.Patches;
 
 global using SA.GoogleDoc;
