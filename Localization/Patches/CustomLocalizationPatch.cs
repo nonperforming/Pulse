@@ -20,7 +20,12 @@ internal static class CustomLocalizationPatch
   // TODO: add fallback language option
   [HarmonyPatch(nameof(LocalizationClient.GetLocalizedString), typeof(string), typeof(LangSection), typeof(LangCode))]
   [HarmonyPrefix]
-  private static void GetCustomLocalization(string token, LangCode language, ref string __result, ref bool __runOriginal)
+  private static void GetCustomLocalization(
+    string token,
+    LangCode language,
+    ref string __result,
+    ref bool __runOriginal
+  )
   {
     if (TryGetCustomLocalization(token, out string? localized))
     {
@@ -44,7 +49,11 @@ internal static class CustomLocalizationPatch
   {
     // TODO: Implement custom language support
 
-    if (!CustomLocalizationHelper.customLocalizedStrings[CustomLocalizationHelper.GetLanguage()].TryGetValue(section, out Dictionary<string, string>? inSection))
+    if (
+      !CustomLocalizationHelper
+        .customLocalizedStrings[CustomLocalizationHelper.GetLanguage()]
+        .TryGetValue(section, out Dictionary<string, string>? inSection)
+    )
     {
       localized = null;
       return false;

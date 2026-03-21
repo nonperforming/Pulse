@@ -27,15 +27,10 @@ internal static class Configuration
       "Localization",
       nameof(LoadLocalizationFromDisk),
       true,
-      "Load localization files from disk.\n" +
-      "Localization files should be put under `<Game Dir>/Localization/<Language name>/<section>.json`."
+      "Load localization files from disk.\n"
+        + "Localization files should be put under `<Game Dir>/Localization/<Language name>/<section>.json`."
     );
-    CustomLanguage = config.Bind<string>(
-      "Localization",
-      nameof(CustomLanguage),
-      "",
-      "The custom language chosen."
-    );
+    CustomLanguage = config.Bind<string>("Localization", nameof(CustomLanguage), "", "The custom language chosen.");
 
     // Development
     //ShowLocalizationKeys = config.Bind(
@@ -54,8 +49,8 @@ internal static class Configuration
       "Development",
       nameof(DumpLocalizationDictionary),
       false,
-      "Dump any loaded localization dictionary to disk.\n" +
-      "Dumped files will be found under `<Game Dir>/Dumped/<Language name>.json`."
+      "Dump any loaded localization dictionary to disk.\n"
+        + "Dumped files will be found under `<Game Dir>/Dumped/<Language name>.json`."
     );
   }
 }

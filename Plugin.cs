@@ -1,5 +1,5 @@
-using PulseLib.Patches;
 using System.IO;
+using PulseLib.Patches;
 
 namespace PulseLib;
 

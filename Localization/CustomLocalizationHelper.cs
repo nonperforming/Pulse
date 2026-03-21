@@ -48,11 +48,11 @@ public static class CustomLocalizationHelper
     }
   }
 
-  public static void Register(LangCode language, LangSection section, Dictionary<string, string> localized)
-    => Register(language.ToString(), section.ToString(), localized);
+  public static void Register(LangCode language, LangSection section, Dictionary<string, string> localized) =>
+    Register(language.ToString(), section.ToString(), localized);
 
-  public static void Register(string language, LangSection section, Dictionary<string, string> localized)
-    => Register(language, section.ToString(), localized);
+  public static void Register(string language, LangSection section, Dictionary<string, string> localized) =>
+    Register(language, section.ToString(), localized);
 
   public static void Register(Dictionary<LangCode, Dictionary<LangSection, Dictionary<string, string>>> localized)
   {
@@ -127,14 +127,21 @@ public static class CustomLocalizationHelper
     if (fileNames.Count() == 1)
     {
       // Amalgamated setup
-      Register(language, (Dictionary<string, Dictionary<string, string>>)Json.Deserialize(File.ReadAllText(fileNames.ElementAt(0))));
+      Register(
+        language,
+        (Dictionary<string, Dictionary<string, string>>)Json.Deserialize(File.ReadAllText(fileNames.ElementAt(0)))
+      );
       return;
     }
 
     foreach (string fileName in Directory.EnumerateFiles(path, "*.json", SearchOption.AllDirectories))
     {
       // Filename as section setup
-      Register(language, Path.GetFileNameWithoutExtension(fileName), JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(fileName))!);
+      Register(
+        language,
+        Path.GetFileNameWithoutExtension(fileName),
+        JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(fileName))!
+      );
     }
   }
   #endregion
