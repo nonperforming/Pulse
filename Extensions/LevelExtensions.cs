@@ -2,14 +2,14 @@ namespace PulseLib.Extensions;
 
 /// <summary>
 /// Extensions for the level enum.
-/// Lists do not include cut/unreleased content.
 /// </summary>
 public static class LevelExtensions
 {
   /// <summary>
-  /// All levels that have a rank (not boss levels).
+  /// All levels that have a rank (excluding boss levels).
   /// Includes bonus levels such as Beans Hopper and Rhythm Weightlifter.
   /// </summary>
+  /// <remarks>Does not include cut/unreleased levels.</remarks>
   public static readonly Level[] AllStandardLevels =
   [
     // Act 1
@@ -50,7 +50,13 @@ public static class LevelExtensions
     Level.Freezeshot,
     Level.FreezeshotH,
     Level.AthleteTherapy,
+    Level.StevensonsTango,
     Level.RhythmWeightlifter,
+    // Act 6
+    Level.HaileyDuet,
+    Level.EdegaRave,
+    // Act 7
+    Level.Blurred,
     // Bonus
     Level.ArtExercise,
     Level.HelpingHands,
@@ -73,12 +79,20 @@ public static class LevelExtensions
     Level.Lesmis,
     Level.InsomniacHard,
     Level.AthleteFinale,
+    Level.PaigesReckoning,
+    Level.Montage,
+    Level.Montage2,
   ];
 
   /// <summary>
   /// All bonus levels.
   /// </summary>
-  public static readonly Level[] AllBonusLevels = [Level.BeansHopper, Level.RhythmWeightlifter];
+  public static readonly Level[] AllBonusLevels = [Level.ArtExercise, Level.BeansHopper, Level.RhythmWeightlifter];
+
+  /// <summary>
+  /// All minigame levels.
+  /// </summary>
+  public static readonly Level[] AllMinigameLevels = [Level.BeansHopper, Level.RhythmWeightlifter];
 
   /// <summary>
   /// All intermission levels.
