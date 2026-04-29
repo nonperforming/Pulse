@@ -50,9 +50,10 @@ internal static class CustomLocalizationPatch
     // TODO: Implement custom language support
 
     if (
-      !CustomLocalizationHelper
-        .customLocalizedStrings[CustomLocalizationHelper.GetLanguage()]
-        .TryGetValue(section, out Dictionary<string, string>? inSection)
+      !CustomLocalizationHelper.customLocalizedStrings.TryGetValue(
+        CustomLocalizationHelper.GetLanguage(),
+        out Dictionary<string, Dictionary<string, string>> langDict
+      ) || !langDict.TryGetValue(section, out Dictionary<string, string> inSection)
     )
     {
       localized = null;
