@@ -1,3 +1,9 @@
+#if BEPINEX5
+using BepInEx.Bootstrap;
+#elif BEPINEX6
+using BepInEx.Unity.Mono.Bootstrap;
+#endif
+
 namespace PulseLib.Patches;
 
 [HarmonyPatch(typeof(scnMenu))]
@@ -15,10 +21,18 @@ internal class MainMenuPatch
     Object.Destroy(modLabelObject.GetComponent<RDVersionText>());
     Text modLabel = modLabelObject.GetComponent<Text>();
     modLabel.fontSize = 5;
-    modLabel.text = $"Pulse v{MyPluginInfo.PLUGIN_VERSION} / {Chainloader.PluginInfos.Count - 1} mods loaded";
-    if (Chainloader.DependencyErrors.Count != 0)
+
+#if BEPINEX5
+    int pluginsLoaded = Chainloader.PluginInfos.Count - 1;
+    int pluginsErrored = Chainloader.DependencyErrors.Count;
+#elif BEPINEX6
+    int pluginsLoaded = UnityChainloader.Instance.Plugins.Count - 1;
+    int pluginsErrored = UnityChainloader.Instance.DependencyErrors.Count;
+#endif
+    modLabel.text = $"Pulse v{MyPluginInfo.PLUGIN_VERSION} / {pluginsLoaded} mods loaded";
+    if (pluginsErrored != 0)
     {
-      modLabel.text += $" / {Chainloader.DependencyErrors.Count} mods failed to load";
+      modLabel.text += $" / {pluginsErrored} mods failed to load";
     }
     modLabelObject.transform.localPosition = new Vector3(-167, -82, 0);
   }

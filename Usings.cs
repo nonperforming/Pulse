@@ -1,6 +1,8 @@
 global using BepInEx;
-global using BepInEx.Bootstrap;
 global using BepInEx.Logging;
+#if BEPINEX6
+global using BepInEx.Unity.Mono;
+#endif
 
 global using HarmonyLib;
 

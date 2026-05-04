@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug-BepInEx5" />
+    <BuildType Name="Debug-BepInEx6" />
+    <BuildType Name="Release-BepInEx5" />
+    <BuildType Name="Release-BepInEx6" />
+  </Configurations>
+  <Project Path="PulseLib.csproj" />
+</Solution>
