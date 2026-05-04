@@ -4,7 +4,7 @@
     <AssemblyName>io.github.nonperforming.pulse</AssemblyName>
     <Product>Pulse</Product>
     <Description>Helper library for Rhythm Doctor</Description>
-    <Version>0.0.5</Version>
+    <Version>0.0.6</Version>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
       https://api.nuget.org/v3/index.json;
