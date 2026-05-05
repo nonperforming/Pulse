@@ -14,8 +14,7 @@ public static class scnBaseExtensions
         : Path.Combine(levelData.path, "main.rdlevel")
     );
 
-  public static void GoToLevelWithImportLevel(ImportLevel importLevel, bool twoPlayer)
-  =>
+  public static void GoToLevelWithImportLevel(ImportLevel importLevel, bool twoPlayer) =>
     scnBase.GoToLevelWithExternalPath(
       twoPlayer
       && importLevel.settings.canBePlayedOn == LevelPlayMode.BothModes
