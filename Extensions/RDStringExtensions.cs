@@ -8,7 +8,7 @@ public static class RDStringExtensions
 
     foreach ((string k, string v) in substituteWith)
     {
-      str = str.Replace($"[{k}]", v);
+      str = str.Replace($"[{k}]", v, StringComparison.Ordinal);
     }
 
     return str;
