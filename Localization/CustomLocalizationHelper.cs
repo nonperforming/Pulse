@@ -91,6 +91,7 @@ public static class CustomLocalizationHelper
 
   /// <summary>
   /// Searches the given path for JSON files to add to the custom localization system.
+  /// Folder given should be the language name.
   /// </summary>
   /// <param name="path">Path to search under</param>
   public static void SearchAndRegisterDirectory(string path)
@@ -98,16 +99,11 @@ public static class CustomLocalizationHelper
     Plugin.Logger.LogDebug($"[Localization] Searching for localization JSONs in {path}");
 
     IEnumerable<string> paths = Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly);
-    // TODO: Remove
-    // foreach (string language in paths)
-    // {
-    //   Directory.GetDirectories(language, "*", SearchOption.TopDirectoryOnly);
-    // }
 
-    foreach (string languagePath in Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly))
+    foreach (string languagePath in paths)
     {
       // Directory.EnumerateDirectories returns full paths, we get the actual folder name here
-      RegisterDirectory(path, new DirectoryInfo(languagePath).Name);
+      RegisterDirectory(languagePath, new DirectoryInfo(languagePath).Name);
     }
   }
 
@@ -116,31 +112,53 @@ public static class CustomLocalizationHelper
   /// </summary>
   /// <param name="path">Path to search under</param>
   /// <param name="language">Language to add under</param>
-  public static void RegisterDirectory(string path, string language)
+  /// <param name="folderKey">Key this localization JSON should be registered under</param>
+  public static void RegisterDirectory(string path, string language, string folderKey = "")
   {
     // TODO: Make more flexible - if flat, assume filename as section setup.
     //       If has nested dicts, treat as amalgamated setup
 
     Plugin.Logger.LogDebug($"[Localization] Registering localization JSONs in {path} for {language}");
 
-    IEnumerable<string> fileNames = Directory.EnumerateFiles(path, "*.json", SearchOption.AllDirectories);
-    if (fileNames.Count() == 1)
+    if (folderKey == "")
     {
-      // Amalgamated setup
-      Register(
-        language,
-        (Dictionary<string, Dictionary<string, string>>)Json.Deserialize(File.ReadAllText(fileNames.ElementAt(0)))
-      );
-      return;
+      // check for amalgamated setup
+      string[] fileNames = Directory.EnumerateFileSystemEntries(path, "*", SearchOption.AllDirectories).ToArray();
+
+      // first entry will always be the directory itself (/.)
+      Plugin.Logger.LogWarning(fileNames.Join());
+      if (fileNames.Length == 2 && fileNames[1].EndsWith(".json"))
+      {
+        // this is an amalgamated setup, ignore filename
+        Register(
+          language,
+          (Dictionary<string, Dictionary<string, string>>)Json.Deserialize(File.ReadAllText(fileNames.ElementAt(0)))
+        );
+        return;
+      }
     }
 
-    foreach (string fileName in Directory.EnumerateFiles(path, "*.json", SearchOption.AllDirectories))
+    // Structured setup, file structure/name is section
+    Plugin.Logger.LogWarning(Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly).Join());
+    foreach (string folderPath in Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly))
     {
-      // Filename as section setup
+      string folderName = new DirectoryInfo(folderPath).Name.Trim();
+      string updatedFolderKey = folderKey == "" ? folderName : folderKey + "." + folderName;
+      RegisterDirectory(folderPath, language, updatedFolderKey);
+    }
+
+    Plugin.Logger.LogWarning(Directory.EnumerateFiles(path, "*", SearchOption.TopDirectoryOnly).Join());
+    foreach (string filePath in Directory.EnumerateFiles(path, "*", SearchOption.TopDirectoryOnly))
+    {
+      string section =
+        folderKey == ""
+          ? Path.GetFileNameWithoutExtension(filePath)
+          : folderKey + "." + Path.GetFileNameWithoutExtension(filePath);
+
       Register(
         language,
-        Path.GetFileNameWithoutExtension(fileName),
-        JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(fileName))!
+        section,
+        JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filePath))!
       );
     }
   }

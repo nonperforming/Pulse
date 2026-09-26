@@ -39,10 +39,33 @@ internal static class CustomLocalizationPatch
   private static bool TryGetCustomLocalization(string token, [NotNullWhen(true)] out string? localized)
   {
     string[] splitting = token.Split('.');
-    string section = splitting[0];
-    string key = string.Join(".", splitting, 1, splitting.Length - 1);
+    localized = null;
 
-    return TryGetCustomLocalization(section, key, out localized);
+    if (
+      !CustomLocalizationHelper.customLocalizedStrings.TryGetValue(
+        CustomLocalizationHelper.GetLanguage(),
+        out Dictionary<string, Dictionary<string, string>> langDict
+      )
+    )
+    {
+      return false;
+    }
+
+    for (int sectionLength = splitting.Length - 1; sectionLength > 0; sectionLength--)
+    {
+      string section = string.Join(".", splitting, 0, sectionLength);
+      string key = string.Join(".", splitting, sectionLength, splitting.Length - sectionLength);
+
+      if (
+        langDict.TryGetValue(section, out Dictionary<string, string> inSection)
+        && inSection.TryGetValue(key, out localized)
+      )
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private static bool TryGetCustomLocalization(string section, string key, [NotNullWhen(true)] out string? localized)
